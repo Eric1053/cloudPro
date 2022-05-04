@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  rng:
+    build: rng
+    image: ${REGISTRY-127.0.0.1:5000}/rng:${TAG-latest}
+    deploy:
+      mode: global
+
+  hasher:
+    build: hasher
+    image: ${REGISTRY-127.0.0.1:5000}/hasher:${TAG-latest}
+
+  db:
+    image: "mysql:latest"
+    ports:
+    - "3308:80"
+   
+  nginx:
+    build: nginx
+    ports:
+     - "3060:80"
+  backend:
+    build: backend
+  frontend:
+    build: frontend
+
+  redis:
+    image: redis
+
+  worker:
+    build: worker
+    image: ${REGISTRY-127.0.0.1:5000}/worker:${TAG-latest}
+    deploy:
+      replicas: 10
