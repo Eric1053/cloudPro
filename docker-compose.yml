@@ -1,3 +1,67 @@
+# version: '3'
+
+# services:
+#   db:
+#     container_name: mysqldb
+#     image: "mysql:latest"
+#     command: --default-authentication-plugin=mysql_native_password
+#     restart: always
+#     volumes:
+#       - ./db:/mysql/data
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=my-secret-pw
+#       - MYSQL_DATABASE=coinminer
+#       - MYSQL_HOST=mysqldb
+#     ports:
+#       - "3308:80
+      
+#   redis:
+#     image: 'redis:latest'
+    
+#   nginx:
+#     depends_on:
+#       - backend
+#       - frontend
+#     restart: always
+#     build: nginx
+#     ports:
+#       - "3060:80"
+#   backend:
+#     build: backend
+#     depends_on:
+#       - db
+#     restart: always
+#     volumes:
+#       - /app/node_modules
+#       - ./backend:/app
+#     environment:
+#       - REDIS_HOST=redis
+#       - REDIS_PORT=6379
+#       - MYSQL_USER=root 
+#       - MYSQL_ROOT_PASSWORD=my-secret-pw
+#       - MYSQL_DATABASE=coinminer
+#       - MYSQL_HOST=mysqldb
+#   frontend:
+#     build: frontend
+#     volumes:
+#       - /app/node_modules
+#       - ./frontend:/app
+  
+#   rng:
+#     build: rng
+#     ports:
+#       - '8001:80'
+
+#   hasher:
+#     build: hasher
+#     ports:
+#       - "8002:80"
+  
+#   worker:
+#     build: worker
+#     depends_on:
+#       - redis
+
 version: '3'
 
 services:
@@ -12,22 +76,22 @@ services:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
       - MYSQL_DATABASE=coinminer
       - MYSQL_HOST=mysqldb
-    ports:
-      - "3308:80
-      
   redis:
     image: 'redis:latest'
-    
   nginx:
     depends_on:
       - backend
       - frontend
     restart: always
-    build: nginx
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
     ports:
-      - "3060:80"
+      - '3060:80'
   backend:
-    build: backend
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
     depends_on:
       - db
     restart: always
@@ -41,26 +105,36 @@ services:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
       - MYSQL_DATABASE=coinminer
       - MYSQL_HOST=mysqldb
+     
   frontend:
-    build: frontend
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
     volumes:
       - /app/node_modules
       - ./frontend:/app
   
   rng:
-    build: rng
+    build:
+      dockerfile: Dockerfile
+      context: ./rng
     ports:
       - '8001:80'
 
   hasher:
-    build: hasher
+    build: 
+      dockerfile: Dockerfile
+      context: ./hasher
     ports:
       - "8002:80"
   
   worker:
-    build: worker
+    build: 
+      dockerfile: Dockerfile
+      context: ./worker
     depends_on:
       - redis
 
     
+  
   
