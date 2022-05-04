@@ -12,6 +12,8 @@ services:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
       - MYSQL_DATABASE=coinminer
       - MYSQL_HOST=mysqldb
+    ports:
+      - "3308:80
       
   redis:
     image: 'redis:latest'
