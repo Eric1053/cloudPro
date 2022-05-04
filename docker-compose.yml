@@ -25,7 +25,7 @@ services:
     restart: always
     build: nginx
     ports:
-      - '3060:80'
+      - "3060:80"
   backend:
     build: backend
     depends_on:
