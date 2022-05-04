@@ -12,8 +12,10 @@ services:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
       - MYSQL_DATABASE=coinminer
       - MYSQL_HOST=mysqldb
+      
   redis:
     image: 'redis:latest'
+    
   nginx:
     depends_on:
       - backend
@@ -43,31 +45,23 @@ services:
       - MYSQL_HOST=mysqldb
      
   frontend:
-    build:
-      dockerfile: Dockerfile
-      context: ./frontend
+    build: frontend
     volumes:
       - /app/node_modules
       - ./frontend:/app
   
   rng:
-    build:
-      dockerfile: Dockerfile
-      context: ./rng
+    build: rng
     ports:
       - '8001:80'
 
   hasher:
-    build: 
-      dockerfile: Dockerfile
-      context: ./hasher
+    build: hasher
     ports:
       - "8002:80"
   
   worker:
-    build: 
-      dockerfile: Dockerfile
-      context: ./worker
+    build: worker
     depends_on:
       - redis
 
